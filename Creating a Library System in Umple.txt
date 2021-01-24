@@ -1,0 +1,68 @@
+
+//Umple - Creating a Library System Using Model - Oriented Programming
+
+
+//It could only be one.
+  singleton;
+  name;
+  //One or more titles
+  1 -- 1..* LibraryItem titles;
+  //And a certain number of copies of an item.
+  1 -- * CopyOfItem borrowables;
+  
+}
+  
+
+
+
+
+class LibraryItem{
+  author;
+  title;
+  ISBN;
+ 
+  
+}
+
+class CopyOfItem{
+  Integer barcode;
+  Boolean isDamaged;
+  //For each copy, it belongs to exactly 1 library item
+  * -- 1 LibraryItem item;
+  //unique idenfication by barcode
+  key { barcode }
+ 
+}
+
+//mix-ins
+class CopyOfItem{
+  loanLimit{
+    inDemand {}
+    normal {}
+  }
+  //state machines, each of these is a state, avaliable is a state, unavaliable is a state
+  availability{
+    avaliable{
+      checkOut -> checkedOut;
+      reportMissing -> lost;
+    }
+    unavailable{
+      checkedOut{
+       }
+       beingRepaired{
+         //Exit action and it will set isDamaged to false.
+          exit / {setIsDamaged(false);}
+        }
+        lost{
+        }
+        //If returnItem occurs, and the book isn't damaged, then its avaliable.
+      //This is called a guard in UML and in Umple
+        returnItem [! isDamaged] -> available;
+      returnItem [isDamaged] -> beingRepaired;
+      discard -> discarded;
+    }
+    discarded{}
+  }
+      
+    
+}
