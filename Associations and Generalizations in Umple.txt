@@ -1,0 +1,24 @@
+
+//Associations and Generalizations
+
+class Person{
+  //attribute
+  Integer id;
+ 
+  
+}
+
+//Both Manager and Employee inherit from class Person
+class Manager{
+  isA Person;
+  
+  //Has one to many employees
+  1 -- * Employee supervisedEmployees;
+  
+  //If manager could manage at most 9 employees, then association is defined as follows.
+  0..1 -- 0 .. 9 Employee supervisedEmployees;
+}
+
+class Employee{
+  isA Person;
+}
